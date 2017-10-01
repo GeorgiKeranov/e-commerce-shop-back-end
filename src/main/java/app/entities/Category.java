@@ -1,5 +1,7 @@
 package app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -12,6 +14,7 @@ public class Category {
 
     private String categoryName;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private Set<Product> products;
 

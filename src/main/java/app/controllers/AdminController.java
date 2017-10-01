@@ -15,6 +15,7 @@ public class AdminController {
     @Autowired
     private ProductService productService;
 
+    // Add products url.
     @PostMapping("/products")
     private Message createNewProduct(@RequestBody Product product) {
 

@@ -1,5 +1,7 @@
 package app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -18,6 +20,7 @@ public class Product {
 
     private String imageName;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "product_category",
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
