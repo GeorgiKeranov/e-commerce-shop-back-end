@@ -15,14 +15,20 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
+    public ResponseEntity<Message> register(@RequestBody User user) {
+
+        // Validate request data.
+        Message errorMessage = user.validateData();
+        if(errorMessage.isError())
+            return new ResponseEntity<Message>(errorMessage, HttpStatus.BAD_REQUEST);
 
         String errorMsg = userService.registerUser(user);
 
         if(errorMsg != null)
-            return new ResponseEntity<Message>(new Message(true, errorMsg), HttpStatus.CONFLICT);
+            return new ResponseEntity<Message>(new Message(true, errorMsg), HttpStatus.UNAUTHORIZED);
 
-        return new ResponseEntity(HttpStatus.OK);
+        Message successful = new Message(false, "You have been registered successful");
+        return new ResponseEntity<Message>(successful, HttpStatus.OK);
     }
 
 

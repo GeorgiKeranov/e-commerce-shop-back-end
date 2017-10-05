@@ -1,8 +1,11 @@
 package app.controllers;
 
 import app.entities.Product;
+import app.models.Message;
 import app.services.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,23 +16,28 @@ public class ProductController {
 
     // get product categories.
     // get products by category
-    // test 1:1 urls with different RequestParams
 
 
     @Autowired
     private ProductService productService;
 
-    @GetMapping()
-    private List<Product> lastProducts(
-            @RequestParam(value = "last", required = false) boolean lastProducts) {
+    @GetMapping
+    private ResponseEntity<?> getAllProductsPage(
+            @RequestParam(value = "page") int page) {
 
+        // page = page - 1 so our page starts from 1 in the front end.
+        page--;
 
-        List<Product> products = productService.getLastProducts();
+        List<Product> products = productService.getAllProductsByPage(page);
 
-        int size = products.size();
+        if(products == null) {
+            return new ResponseEntity<Message>(
+                    new Message(true, "Invalid page requested"),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
 
-        return products;
+        return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
 
     }
-
 }

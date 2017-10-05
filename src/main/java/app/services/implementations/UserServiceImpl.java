@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,6 +53,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public String registerUser(User user) {
 
+        // Check if username or email already exists in the database.
+        User userWithThatUsername = userRepository.findByUsername(user.getUsername());
+        if(userWithThatUsername != null)
+            return "User with that username already exists.";
+
+        User userWithThatEmail = userRepository.findByEmail(user.getEmail());
+        if(userWithThatEmail != null)
+            return "User with that email already exists.";
+
+        // Encoding user's password.
         BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
         user.setPassword(bCrypt.encode(user.getPassword()));
 

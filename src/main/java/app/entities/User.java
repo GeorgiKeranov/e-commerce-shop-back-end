@@ -1,5 +1,7 @@
 package app.entities;
 
+import app.models.Message;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -108,6 +110,31 @@ public class User implements Serializable{
         this.roles.add(role);
     }
 
+    public Message validateData() {
+
+        if(username == null || username.equals(""))
+            return new Message(true, "Username can\'t be blank!");
+
+        if(password == null || password.equals(""))
+            return new Message(true, "Password can\'t be blank!");
+
+        if(address == null || address.equals(""))
+            return new Message(true, "Address can\'t be blank!");
+
+        if(email == null || email.equals(""))
+            return new Message(true, "Email can\'t be blank!");
+
+        if(firstName == null || firstName.equals(""))
+           return new Message(true, "First name can\'t be blank!");
+
+        if(lastName == null || lastName.equals(""))
+            return new Message(true, "Last name can\'t be blank!");
+
+        if(phone == null || phone.equals(""))
+           return new Message(true, "Phone can\'t be blank!");
+
+        return new Message(false);
+    }
 
     // TODO add many addresses. UserRepository can choose the main address when it is buying.
     // TODO add birthday, question and answer to reset password if it's forgotten.

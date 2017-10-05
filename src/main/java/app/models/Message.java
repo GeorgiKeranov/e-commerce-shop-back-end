@@ -7,6 +7,14 @@ public class Message {
 
     private boolean isError;
 
+    public Message() {
+
+    }
+
+    public Message(boolean isError) {
+        this.isError = isError;
+    }
+
     public Message(boolean isError, String message) {
         this.isError = isError;
         this.message = message;

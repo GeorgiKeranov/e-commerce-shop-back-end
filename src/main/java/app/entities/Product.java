@@ -1,5 +1,6 @@
 package app.entities;
 
+import app.models.Message;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -77,5 +78,16 @@ public class Product {
 
     public void addCategory(Category category) {
         this.categories.add(category);
+    }
+
+    public Message validateData() {
+
+        if(name == null || name.equals(""))
+            return new Message(true, "Name of the product can\'t be blank!");
+
+        if(money == null || money.equals(""))
+            return new Message(true, "Money of the product can\'t be blank!");
+
+        return new Message(false);
     }
 }

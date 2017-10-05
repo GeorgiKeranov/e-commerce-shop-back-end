@@ -11,7 +11,7 @@ public interface ProductService {
     // return null if there is not error.
     String save(Product product);
 
-    // Getting last 10 added products.
-    List<Product> getLastProducts();
+    // Getting all products by page.
+    List<Product> getAllProductsByPage(int page);
 
 }

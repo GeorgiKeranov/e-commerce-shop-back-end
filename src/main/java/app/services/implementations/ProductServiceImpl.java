@@ -1,16 +1,14 @@
 package app.services.implementations;
 
-import app.entities.Category;
 import app.entities.Product;
 import app.repositories.CategoryRepo;
 import app.repositories.ProductRepository;
 import app.services.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -19,14 +17,28 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private CategoryRepo categoryRepo;
+    private CategoryRepo categoryRepository;
 
     @Override
     public String save(Product product) {
 
+        Product productWithThatName = productRepository.findByName(product.getName());
+        if(productWithThatName != null)
+            return "Product with that name already exists.";
+
         productRepository.save(product);
 
         return null;
+    }
+
+    @Override
+    public List<Product> getAllProductsByPage(int page) {
+
+        if(page < 0) {
+            return null;
+        }
+
+       return productRepository.getAllProductsPageable(new PageRequest(page, 10));
     }
 
     @Override
