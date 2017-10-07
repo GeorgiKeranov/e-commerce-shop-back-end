@@ -9,4 +9,8 @@ public interface UserService {
     // Returns String with message what is wrong with the register.
     String registerUser(User user);
 
+    User getUserByUsername(String username);
+
+    Long getUserIdByUsername(String username);
+
 }

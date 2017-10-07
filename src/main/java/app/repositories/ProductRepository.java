@@ -13,7 +13,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product AS p ORDER BY id DESC")
     List<Product> getAllProductsPageable(Pageable pageable);
 
-    Product findByName(String name);
+    Product findByTitle(String title);
 
 
 }

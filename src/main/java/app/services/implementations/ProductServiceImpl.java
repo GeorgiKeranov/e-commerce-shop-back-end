@@ -1,7 +1,6 @@
 package app.services.implementations;
 
 import app.entities.Product;
-import app.repositories.CategoryRepo;
 import app.repositories.ProductRepository;
 import app.services.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +15,12 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private CategoryRepo categoryRepository;
-
     @Override
     public String save(Product product) {
 
-        Product productWithThatName = productRepository.findByName(product.getName());
-        if(productWithThatName != null)
-            return "Product with that name already exists.";
+        Product productWithThatTitle = productRepository.findByTitle(product.getTitle());
+        if(productWithThatTitle != null)
+            return "Product with that title already exists.";
 
         productRepository.save(product);
 
@@ -40,12 +36,5 @@ public class ProductServiceImpl implements ProductService {
 
        return productRepository.getAllProductsPageable(new PageRequest(page, 10));
     }
-
-    @Override
-    public List<Product> getLastProducts() {
-
-        return productRepository.getLast10Products();
-    }
-
 
 }

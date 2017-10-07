@@ -4,6 +4,7 @@ import app.models.Message;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,11 +14,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String title;
 
     private String description;
 
-    private String money;
+    private int money;
 
     private String imageName;
 
@@ -28,6 +29,18 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
     private Set<Category> categories;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems;
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
     public Long getId() {
         return id;
     }
@@ -36,12 +49,12 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -52,11 +65,11 @@ public class Product {
         this.description = description;
     }
 
-    public String getMoney() {
+    public int getMoney() {
         return money;
     }
 
-    public void setMoney(String money) {
+    public void setMoney(int money) {
         this.money = money;
     }
 
@@ -82,10 +95,10 @@ public class Product {
 
     public Message validateData() {
 
-        if(name == null || name.equals(""))
+        if(title == null || title.equals(""))
             return new Message(true, "Name of the product can\'t be blank!");
 
-        if(money == null || money.equals(""))
+        if(money == 0)
             return new Message(true, "Money of the product can\'t be blank!");
 
         return new Message(false);
