@@ -18,6 +18,7 @@ public class OrderItem {
     @ManyToOne
     private Product product;
 
+    // Default quantity is 1.
     private int quantity = 1;
 
     public Long getId() {

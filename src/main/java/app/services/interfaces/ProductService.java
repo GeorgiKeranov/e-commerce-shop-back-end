@@ -14,4 +14,6 @@ public interface ProductService {
     // Getting all products by page.
     List<Product> getAllProductsByPage(int page);
 
+    void setMainImageIdByImageIdAndProductId(Long imageId, Long productId);
+
 }

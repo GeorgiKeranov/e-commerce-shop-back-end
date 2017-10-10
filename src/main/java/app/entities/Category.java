@@ -14,6 +14,14 @@ public class Category {
 
     private String categoryName;
 
+    public Category() {
+
+    }
+
+    public Category(Long id) {
+        this.id = id;
+    }
+
     @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private Set<Product> products;

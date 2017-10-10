@@ -14,8 +14,8 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    // get product categories.
-    // get products by category
+    //TODO get product categories.
+    //TODO get products by category
 
 
     @Autowired
@@ -23,11 +23,9 @@ public class ProductController {
 
     @GetMapping
     private ResponseEntity<?> getAllProductsPage(
-            @RequestParam(value = "page") int page) {
+            @RequestParam(value = "page", required = false) int page) {
 
-        // page = page - 1 so our page starts from 1 in the front end.
-        page--;
-
+        // TODO VALIDATE PAGE
         List<Product> products = productService.getAllProductsByPage(page);
 
         if(products == null) {

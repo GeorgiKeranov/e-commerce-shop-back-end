@@ -2,7 +2,6 @@ package app.services.interfaces;
 
 import app.entities.Order;
 import app.entities.OrderItem;
-import app.entities.User;
 
 import java.util.List;
 
@@ -11,12 +10,15 @@ public interface OrderService {
     Order getActiveOrderByUserId(Long userId);
     Long getActiveOrderIdByUserId(Long userId);
     List<OrderItem> getOrderItemsByOrderId(Long orderId);
+    List<Order> getOrdersWithStatusSent(int page);
+    List<Order> getOrdersWithStatusSentAndCompletedById(Long userId, int page);
 
     void saveOrder(Order order);
     void saveOrderItem(OrderItem orderItem, Long userId);
 
     void setActiveOrderStatusToSent(Order order);
-    void updateOrderItem(Long orderItemId, int quantity);
+    void setSentOrderStatusToCompleted(Long orderId);
+    void updateOrderItemByOrderItemIdAndQuantityAndOrderId(Long orderItemId, int quantity, Long orderId);
 
-    void deleteOrderItem(Long orderItemId);
+    void deleteOrderItemByIdAndOrderId(Long orderItemId, Long orderId);
 }

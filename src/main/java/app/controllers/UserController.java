@@ -25,7 +25,7 @@ public class UserController {
         String errorMsg = userService.registerUser(user);
 
         if(errorMsg != null)
-            return new ResponseEntity<Message>(new Message(true, errorMsg), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<Message>(new Message(true, errorMsg), HttpStatus.BAD_REQUEST);
 
         Message successful = new Message(false, "You have been registered successful");
         return new ResponseEntity<Message>(successful, HttpStatus.OK);

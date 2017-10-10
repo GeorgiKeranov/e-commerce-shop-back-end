@@ -4,6 +4,7 @@ import app.models.Message;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,14 +21,18 @@ public class Product {
 
     private int money;
 
-    private String imageName;
+    private Long mainImageId;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private List<Image> images;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "product_category",
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "product")
@@ -57,6 +62,14 @@ public class Product {
         this.title = title;
     }
 
+    public Long getMainImageId() {
+        return mainImageId;
+    }
+
+    public void setMainImageId(Long mainImageId) {
+        this.mainImageId = mainImageId;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -73,12 +86,12 @@ public class Product {
         this.money = money;
     }
 
-    public String getImageName() {
-        return imageName;
+    public List<Image> getImages() {
+        return images;
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public Set<Category> getCategories() {

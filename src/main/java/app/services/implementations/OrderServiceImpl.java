@@ -2,11 +2,11 @@ package app.services.implementations;
 
 import app.entities.Order;
 import app.entities.OrderItem;
-import app.entities.User;
 import app.repositories.OrderItemRepository;
 import app.repositories.OrderRepository;
 import app.services.interfaces.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +37,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getOrdersWithStatusSent(int page) {
+        return orderRepository.getOrdersWithStatusSent(new PageRequest(page, 10));
+    }
+
+    @Override
+    public List<Order> getOrdersWithStatusSentAndCompletedById(Long userId, int page) {
+        return orderRepository.getOrdersWithStatusSentAndCompletedById(
+                userId,
+                new PageRequest(page, 10)
+        );
+    }
+
+    @Override
     public void saveOrder(Order order) {
         orderRepository.save(order);
     }
@@ -59,12 +72,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderItem(Long orderItemId, int quantity) {
-        orderItemRepository.updateOrderItemByIdAndQuantity(orderItemId, quantity);
+    public void setSentOrderStatusToCompleted(Long orderId) {
+        orderRepository.updateStatusToCompletedById(orderId);
     }
 
     @Override
-    public void deleteOrderItem(Long orderItemId) {
-        orderItemRepository.delete(orderItemId);
+    public void updateOrderItemByOrderItemIdAndQuantityAndOrderId(Long orderItemId, int quantity, Long orderId) {
+        orderItemRepository.updateOrderItemByOrderItemIdAndQuantityAndOrderId(orderItemId, quantity, orderId);
+    }
+
+    @Override
+    public void deleteOrderItemByIdAndOrderId(Long orderItemId, Long orderId) {
+        orderItemRepository.deleteOrderItemByIdAndOrderId(orderItemId, orderId);
     }
 }

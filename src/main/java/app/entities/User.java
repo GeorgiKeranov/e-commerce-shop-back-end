@@ -1,6 +1,7 @@
 package app.entities;
 
 import app.models.Message;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +20,8 @@ public class User implements Serializable{
 
     private String password;
 
+    private String country;
+
     private String address;
 
     private String email;
@@ -29,12 +32,14 @@ public class User implements Serializable{
 
     private String phone;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
                 joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
@@ -68,6 +73,14 @@ public class User implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getAddress() {
@@ -132,6 +145,9 @@ public class User implements Serializable{
 
         if(address == null || address.equals(""))
             return new Message(true, "Address can\'t be blank!");
+
+        if(country == null || country.equals(""))
+            return new Message(true, "Country can\'t be blank!");
 
         if(email == null || email.equals(""))
             return new Message(true, "Email can\'t be blank!");

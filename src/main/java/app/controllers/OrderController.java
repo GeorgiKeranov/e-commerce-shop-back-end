@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/order")
 public class OrderController {
 
 
@@ -26,10 +25,11 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/items")
+    @PostMapping("/order/items")
     private ResponseEntity<?> addOrderItemToOrder(@RequestBody OrderItem orderItem,
                                                   Principal principal) {
 
+        // Validate requested OrderItem.
         if(orderItem.getProduct().getId() == null) {
             return new ResponseEntity<Message>(
                     new Message(true, "No id for product"),
@@ -47,21 +47,29 @@ public class OrderController {
         );
     }
 
-    @GetMapping("/items")
+    @GetMapping("/order/items")
     private ResponseEntity<List<OrderItem>> getOrderItems(Principal principal) {
 
         Long userId = userService.getUserIdByUsername(principal.getName());
         Long orderId = orderService.getActiveOrderIdByUserId(userId);
 
+        //TODO validate orderItems are not empty.
         List<OrderItem> orderItems = orderService.getOrderItemsByOrderId(orderId);
 
         return new ResponseEntity<List<OrderItem>>(orderItems, HttpStatus.OK);
     }
 
-    @DeleteMapping("/items/{id}")
-    private ResponseEntity<Message> deleteOrderItem(@PathVariable("id") Long orderItemId) {
+    @DeleteMapping("/order/items/{id}")
+    private ResponseEntity<Message> deleteOrderItem(@PathVariable("id") Long orderItemId,
+                                                    Principal principal) {
 
-        orderService.deleteOrderItem(orderItemId);
+        Long userId = userService.getUserIdByUsername(principal.getName());
+
+        // OrderId is used to check if the OrderItem is on the authenticated user Order.
+        Long orderId = orderService.getActiveOrderIdByUserId(userId);
+
+
+        orderService.deleteOrderItemByIdAndOrderId(orderItemId, orderId);
 
         return new ResponseEntity<Message>(
                 new Message(false, "successful"),
@@ -69,11 +77,19 @@ public class OrderController {
         );
     }
 
-    @PutMapping("/items/{id}")
+    @PutMapping("/order/items/{id}")
     private ResponseEntity<Message> updateOrderItem(@PathVariable("id") Long orderItemId,
-                                                    @RequestBody Map<String, Integer> body) {
+                                                    @RequestBody Map<String, Integer> body,
+                                                    Principal principal) {
 
-        orderService.updateOrderItem(orderItemId, body.get("quantity"));
+        Long userId = userService.getUserIdByUsername(principal.getName());
+
+        // OrderId is used to check if the OrderItem is on the authenticated user Order.
+        Long orderId = orderService.getActiveOrderIdByUserId(userId);
+
+        orderService.updateOrderItemByOrderItemIdAndQuantityAndOrderId(
+                orderItemId, body.get("quantity"), orderId
+        );
 
         return new ResponseEntity<Message>(
                 new Message(false, "successful"),
@@ -81,7 +97,7 @@ public class OrderController {
         );
     }
 
-    @PostMapping("/buy")
+    @PostMapping("/order/buy")
     private ResponseEntity<Message> buyOrder(Principal principal) {
 
         Long userId = userService.getUserIdByUsername(principal.getName());
@@ -94,8 +110,10 @@ public class OrderController {
             );
         }
 
+        // Setting status "active" to "sent" in the database.
         orderService.setActiveOrderStatusToSent(order);
 
+        // Creating new order with "active" status for authenticated user.
         Order newActiveOrder = new Order();
 
         User user = new User();
@@ -105,5 +123,17 @@ public class OrderController {
         orderService.saveOrder(newActiveOrder);
 
         return new ResponseEntity<Message>(new Message(false, "successful"), HttpStatus.OK);
+    }
+
+    @GetMapping("/orders/history")
+    private ResponseEntity<List<Order>> getUserOrdersHistory(@RequestParam("page") int page,
+                                                             Principal principal) {
+
+        Long userId = userService.getUserIdByUsername(principal.getName());
+
+        List<Order> sentAndCompletedOrders =
+                orderService.getOrdersWithStatusSentAndCompletedById(userId, page);
+
+        return new ResponseEntity<List<Order>>(sentAndCompletedOrders, HttpStatus.OK);
     }
 }

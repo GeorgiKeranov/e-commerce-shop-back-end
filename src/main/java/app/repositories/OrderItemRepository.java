@@ -16,7 +16,12 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE OrderItem o SET o.quantity = ?2 where o.id = ?1")
-    void updateOrderItemByIdAndQuantity(Long id, int quantity);
+    @Query("UPDATE OrderItem o SET o.quantity = ?2 where o.id = ?1 and o.order.id = ?3")
+    void updateOrderItemByOrderItemIdAndQuantityAndOrderId(Long orderItemId, int quantity, Long orderId);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE OrderItem o WHERE o.id = ?1 and o.order.id = ?2")
+    void deleteOrderItemByIdAndOrderId(Long orderItemId, Long orderId);
 
 }

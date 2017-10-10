@@ -37,4 +37,9 @@ public class ProductServiceImpl implements ProductService {
        return productRepository.getAllProductsPageable(new PageRequest(page, 10));
     }
 
+    @Override
+    public void setMainImageIdByImageIdAndProductId(Long imageId, Long productId) {
+        productRepository.setMainImageIdByImageIdAndProductId(imageId, productId);
+    }
+
 }
