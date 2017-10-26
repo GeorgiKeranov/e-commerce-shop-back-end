@@ -8,11 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 public class UserController {
 
     @Autowired
     private UserService userService;
+
 
     @PostMapping("/register")
     public ResponseEntity<Message> register(@RequestBody User user) {
@@ -31,5 +34,11 @@ public class UserController {
         return new ResponseEntity<Message>(successful, HttpStatus.OK);
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<?> getAuthenticatedUserData(Principal principal) {
 
+            return new ResponseEntity<User>(
+                    userService.getUserByUsername(principal.getName()),
+                    HttpStatus.OK);
+    }
 }

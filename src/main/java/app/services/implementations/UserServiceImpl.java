@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -31,29 +31,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private OrderService orderService;
-
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        if(username == null || username.equals("")) throw new UsernameNotFoundException("Invalid Username");
-
-        User user = userRepository.findByUsername(username);
-
-        if(user == null){
-            throw new UsernameNotFoundException("Invalid Username");
-        }
-
-        else {
-            Set<GrantedAuthority> authorities = user.getRoles()
-                    .stream()
-                    .map(role -> new SimpleGrantedAuthority(role.getName()))
-                    .collect(Collectors.toSet());
-
-            return new org.springframework.security.core.userdetails
-                    .User(user.getUsername(), user.getPassword(), authorities);
-        }
-    }
 
     @Override
     public String registerUser(User user) {

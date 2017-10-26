@@ -1,5 +1,7 @@
 package app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -12,8 +14,17 @@ public class Role {
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
+
+    public Role() {
+
+    }
+
+    public Role(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;

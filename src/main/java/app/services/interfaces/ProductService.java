@@ -1,6 +1,7 @@
 package app.services.interfaces;
 
 
+import app.entities.Category;
 import app.entities.Product;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface ProductService {
     List<Product> getAllProductsByPage(int page);
 
     void setMainImageIdByImageIdAndProductId(Long imageId, Long productId);
+
+    List<Category> getAllCategories();
 
 }

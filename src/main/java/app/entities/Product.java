@@ -21,6 +21,7 @@ public class Product {
 
     private int money;
 
+    // Change it to mainImageName
     private Long mainImageId;
 
     @JsonIgnore

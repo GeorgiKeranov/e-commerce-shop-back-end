@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.entities.Category;
 import app.entities.Product;
 import app.models.Message;
 import app.services.interfaces.ProductService;
@@ -11,21 +12,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
 public class ProductController {
 
-    //TODO get product categories.
     //TODO get products by category
-
 
     @Autowired
     private ProductService productService;
 
-    @GetMapping
+    @GetMapping("/products")
     private ResponseEntity<?> getAllProductsPage(
-            @RequestParam(value = "page", required = false) int page) {
+            @RequestParam(value = "page", defaultValue = "0") int page) {
 
-        // TODO VALIDATE PAGE
         List<Product> products = productService.getAllProductsByPage(page);
 
         if(products == null) {
@@ -36,6 +33,13 @@ public class ProductController {
         }
 
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+    }
 
+    @GetMapping("/categories")
+    private ResponseEntity<List<Category>> getAllCategories() {
+
+        List<Category> allCategories = productService.getAllCategories();
+
+        return new ResponseEntity<List<Category>>(allCategories, HttpStatus.OK);
     }
 }

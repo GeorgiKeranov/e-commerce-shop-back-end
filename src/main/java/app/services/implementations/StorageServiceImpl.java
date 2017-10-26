@@ -15,6 +15,8 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public String saveImage(MultipartFile file) {
 
+
+        // TODO FIX SAVING THE IMAGE like name.jpg, name.jpg1, name.jpg2 ...
         try {
             Path location = Paths.get(imagesPath);
 
