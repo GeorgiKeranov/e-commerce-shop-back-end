@@ -1,5 +1,6 @@
 package app.configs;
 
+import app.security.JwtAuthenticationEntryPoint;
 import app.security.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,9 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter{
     private UserDetailsService userDetailsService;
 
     @Autowired
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
+
+    @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
                 .userDetailsService(this.userDetailsService)
@@ -41,6 +45,8 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 

@@ -2,8 +2,10 @@ package app.controllers;
 
 import app.models.JwtAuthenticationRequest;
 import app.models.JwtAuthenticationResponse;
+import app.models.Message;
 import app.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,6 +46,7 @@ public class AuthenticationController {
                         authenticationRequest.getPassword()
                 )
         );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Reload password post-security so we can generate token
