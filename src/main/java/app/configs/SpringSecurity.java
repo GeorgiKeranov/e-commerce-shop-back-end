@@ -42,6 +42,11 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter{
         return new JwtAuthenticationTokenFilter();
     }
 
+    @Bean
+    public CorsFilter corsFilterBean() throws Exception {
+        return new CorsFilter();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -66,6 +71,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter{
                 .anyRequest().hasRole("USER");
 
         http
+                .addFilterBefore(corsFilterBean(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
                 .headers().cacheControl();
     }
