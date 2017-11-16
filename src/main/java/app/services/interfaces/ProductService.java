@@ -12,11 +12,20 @@ public interface ProductService {
     // return null if there is not error.
     String save(Product product);
 
+    String update(Product product);
+
+    void saveCategory(Category category);
+
+    void updateCategory(Category category);
+
     // Getting all products by page.
     List<Product> getAllProductsByPage(int page);
 
-    void setMainImageIdByImageIdAndProductId(Long imageId, Long productId);
-
     List<Category> getAllCategories();
 
+    Product getProductById(Long id);
+
+    Category getCategoryById(Long categoryId);
+
+    void setMainImageNameByProductId(String imageName, Long productId);
 }

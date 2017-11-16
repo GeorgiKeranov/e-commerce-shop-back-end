@@ -11,4 +11,5 @@ public interface StorageService {
     // and returning the name of the image.
     String saveImage(MultipartFile file);
 
+    void deleteImage(String imageName);
 }

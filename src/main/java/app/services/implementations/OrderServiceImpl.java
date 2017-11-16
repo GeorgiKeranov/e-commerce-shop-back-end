@@ -22,6 +22,11 @@ public class OrderServiceImpl implements OrderService {
     private OrderItemRepository orderItemRepository;
 
     @Override
+    public Long getOrderItemsCountByUserId(Long userId) {
+        return orderItemRepository.getOrderItemsCountByUserIdWithStatusActive(userId);
+    }
+
+    @Override
     public Order getActiveOrderByUserId(Long userId) {
         return orderRepository.getActiveOrderByUserId(userId);
     }
@@ -59,9 +64,19 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = orderRepository.getActiveOrderByUserId(userId);
 
-        orderItem.setOrder(order);
+        OrderItem oldOrderItem = orderItemRepository.getOrderItemByOrderAndProductId(
+                order.getId(),
+                orderItem.getProduct().getId()
+        );
 
-        orderItemRepository.save(orderItem);
+        if(oldOrderItem != null) {
+            oldOrderItem.setQuantity(oldOrderItem.getQuantity() + 1);
+            orderItemRepository.save(oldOrderItem);
+        }
+        else {
+            orderItem.setOrder(order);
+            orderItemRepository.save(orderItem);
+        }
     }
 
     @Override

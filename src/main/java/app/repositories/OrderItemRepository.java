@@ -11,6 +11,12 @@ import java.util.List;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
+    @Query("SELECT o FROM OrderItem o WHERE o.order.id = ?1 and o.product.id = ?2")
+    OrderItem getOrderItemByOrderAndProductId(Long orderId, Long productId);
+
+    @Query("SELECT COUNT(o) FROM OrderItem o WHERE o.order.user.id = ?1 and o.order.status = \'active\'")
+    Long getOrderItemsCountByUserIdWithStatusActive(Long userId);
+
     @Query("SELECT o FROM OrderItem AS o where o.order.id = ?1 and o.order.status = \'active\'")
     List<OrderItem> getOrderItemsByOrderId(Long orderId);
 

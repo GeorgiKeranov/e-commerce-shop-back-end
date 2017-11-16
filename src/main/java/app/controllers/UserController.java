@@ -41,4 +41,5 @@ public class UserController {
                     userService.getUserByUsername(principal.getName()),
                     HttpStatus.OK);
     }
+
 }

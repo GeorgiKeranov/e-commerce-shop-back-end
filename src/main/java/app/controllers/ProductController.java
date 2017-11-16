@@ -42,4 +42,20 @@ public class ProductController {
 
         return new ResponseEntity<List<Category>>(allCategories, HttpStatus.OK);
     }
+
+    @GetMapping("/categories/{id}")
+    private ResponseEntity<?> getCategoryById(@PathVariable("id") Long id) {
+
+        Category category = productService.getCategoryById(id);
+        return new ResponseEntity<Category>(category, HttpStatus.OK);
+    }
+
+    @GetMapping("/products/{id}")
+    private ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
+        Product product = productService.getProductById(id);
+        if(product != null)
+            return new ResponseEntity<Product>(product, HttpStatus.OK);
+        else
+            return new ResponseEntity<Message>(new Message(true), HttpStatus.BAD_REQUEST);
+    }
 }

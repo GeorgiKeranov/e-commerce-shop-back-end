@@ -74,5 +74,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserIdByUsername(username);
     }
 
-
 }

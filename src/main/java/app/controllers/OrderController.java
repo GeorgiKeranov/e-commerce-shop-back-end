@@ -4,6 +4,7 @@ import app.entities.Order;
 import app.entities.OrderItem;
 import app.entities.User;
 import app.models.Message;
+import app.models.OrderItemsCount;
 import app.services.interfaces.OrderService;
 import app.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,16 @@ public class OrderController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("/order/items/count")
+    private ResponseEntity<OrderItemsCount> getOrderItemsCount(Principal principal) {
+        Long userId = userService.getUserIdByUsername(principal.getName());
+        Long itemCount = orderService.getOrderItemsCountByUserId(userId);
+
+        OrderItemsCount orderItemsCount = new OrderItemsCount(itemCount);
+
+        return new ResponseEntity<OrderItemsCount>(orderItemsCount, HttpStatus.OK);
+    }
 
     @PostMapping("/order/items")
     private ResponseEntity<?> addOrderItemToOrder(@RequestBody OrderItem orderItem,
@@ -79,7 +90,7 @@ public class OrderController {
 
     @PutMapping("/order/items/{id}")
     private ResponseEntity<Message> updateOrderItem(@PathVariable("id") Long orderItemId,
-                                                    @RequestBody Map<String, Integer> body,
+                                                    @RequestParam("quantity") int quantity,
                                                     Principal principal) {
 
         Long userId = userService.getUserIdByUsername(principal.getName());
@@ -88,7 +99,7 @@ public class OrderController {
         Long orderId = orderService.getActiveOrderIdByUserId(userId);
 
         orderService.updateOrderItemByOrderItemIdAndQuantityAndOrderId(
-                orderItemId, body.get("quantity"), orderId
+                orderItemId, quantity, orderId
         );
 
         return new ResponseEntity<Message>(

@@ -15,7 +15,7 @@ public class ImageServiceImpl implements ImageService{
     private ImageRepository imageRepository;
 
     @Override
-    public Long saveImageWithNameAndProductId(String imageName, Long productId) {
+    public void saveImageWithNameAndProductId(String imageName, Long productId) {
 
         Image image = new Image();
         image.setName(imageName);
@@ -25,8 +25,12 @@ public class ImageServiceImpl implements ImageService{
 
         image.setProduct(product);
         imageRepository.save(image);
+    }
 
-        return image.getId();
+    @Override
+    public void deleteImageByImageName(String imageName) {
+
+        imageRepository.deleteImageByImageName(imageName);
     }
 
 }

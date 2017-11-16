@@ -19,16 +19,14 @@ public class Product {
 
     private String description;
 
-    private int money;
+    private int price;
 
-    // Change it to mainImageName
-    private Long mainImageId;
+    private String mainImageName;
 
     @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<Image> images;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "product_category",
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
@@ -63,12 +61,12 @@ public class Product {
         this.title = title;
     }
 
-    public Long getMainImageId() {
-        return mainImageId;
+    public String getMainImageName() {
+        return mainImageName;
     }
 
-    public void setMainImageId(Long mainImageId) {
-        this.mainImageId = mainImageId;
+    public void setMainImageName(String mainImageName) {
+        this.mainImageName = mainImageName;
     }
 
     public String getDescription() {
@@ -79,12 +77,12 @@ public class Product {
         this.description = description;
     }
 
-    public int getMoney() {
-        return money;
+    public int getPrice() {
+        return price;
     }
 
-    public void setMoney(int money) {
-        this.money = money;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public List<Image> getImages() {
@@ -110,9 +108,9 @@ public class Product {
     public Message validateData() {
 
         if(title == null || title.equals(""))
-            return new Message(true, "Name of the product can\'t be blank!");
+            return new Message(true, "Title of the product can\'t be blank!");
 
-        if(money == 0)
+        if(price == 0)
             return new Message(true, "Money of the product can\'t be blank!");
 
         return new Message(false);

@@ -15,23 +15,24 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public String saveImage(MultipartFile file) {
 
-
-        // TODO FIX SAVING THE IMAGE like name.jpg, name.jpg1, name.jpg2 ...
         try {
             Path location = Paths.get(imagesPath);
 
             String nameOfTheImage = file.getOriginalFilename();
+            int positionOfLastDot = nameOfTheImage.lastIndexOf(".");
+            String extensionOfTheImage = nameOfTheImage.substring(positionOfLastDot, nameOfTheImage.length());
+            nameOfTheImage = nameOfTheImage.substring(0, positionOfLastDot);
 
             // Creating unique name for the image.
             String tempName = nameOfTheImage;
             int randomNumber = 1;
-            while(Files.exists(location.resolve(tempName))) {
+            while(Files.exists(location.resolve(tempName + extensionOfTheImage))) {
                 tempName = nameOfTheImage;
                 tempName = tempName + randomNumber;
                 randomNumber++;
             }
 
-            nameOfTheImage = tempName;
+            nameOfTheImage = tempName + extensionOfTheImage;
 
             Files.copy(file.getInputStream(), location.resolve(nameOfTheImage));
             return nameOfTheImage;
@@ -41,6 +42,22 @@ public class StorageServiceImpl implements StorageService {
         }
 
         return null;
+    }
+
+    @Override
+    public void deleteImage(String imageName) {
+
+        Path folderPath = Paths.get(imagesPath);
+        Path filePath = folderPath.resolve(imageName);
+
+        try {
+
+            if(Files.exists(filePath))
+                Files.delete(filePath);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

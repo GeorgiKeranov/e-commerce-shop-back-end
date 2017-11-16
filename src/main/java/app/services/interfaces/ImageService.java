@@ -3,6 +3,8 @@ package app.services.interfaces;
 
 public interface ImageService {
 
-    Long saveImageWithNameAndProductId(String imageName, Long productId);
+    void saveImageWithNameAndProductId(String imageName, Long productId);
+
+    void deleteImageByImageName(String imageName);
 
 }

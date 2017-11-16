@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SpringSecurity extends WebSecurityConfigurerAdapter{
+public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -62,7 +62,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter{
                 .antMatchers("/register", "/login").anonymous()
 
                 // /authentication url can be viewed by all the users.
-                .antMatchers("/authenticated", "/categories", "/products", "/res/**").permitAll()
+                .antMatchers("/authenticated", "/categories/**", "/products/**", "/res/**").permitAll()
 
                 // /admin/** urls can be viewed only by the admins.
                 .antMatchers("/admin/**").hasRole("ADMIN")
@@ -75,4 +75,5 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter{
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
                 .headers().cacheControl();
     }
+
 }

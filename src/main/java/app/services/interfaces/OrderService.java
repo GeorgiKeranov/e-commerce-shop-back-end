@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface OrderService {
 
+    Long getOrderItemsCountByUserId(Long userId);
+
     Order getActiveOrderByUserId(Long userId);
     Long getActiveOrderIdByUserId(Long userId);
     List<OrderItem> getOrderItemsByOrderId(Long orderId);
