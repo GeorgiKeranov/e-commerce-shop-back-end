@@ -21,12 +21,22 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM app.entities.Order o WHERE o.status = \'sent\'")
     List<Order> getOrdersWithStatusSent(Pageable pageable);
 
+    @Query("SELECT o FROM app.entities.Order o WHERE o.status = \'completed\' ORDER BY o.id DESC")
+    List<Order> getOrdersWithStatusCompleted(Pageable pageable);
+
     @Query("SELECT o FROM app.entities.Order o WHERE o.user.id = ?1 and o.status != \'active\'")
     List<Order> getOrdersWithStatusSentAndCompletedById(Long id, Pageable pageable);
 
     @Transactional
     @Modifying
-    @Query("UPDATE app.entities.Order o SET o.status = \'completed\' " +
-            "WHERE o.id = ?1 and o.status = \'sent\'")
-    void updateStatusToCompletedById(Long id);
+    @Query("UPDATE app.entities.Order o SET o.status = \'completed\' WHERE o.id = ?1")
+    void updateStatusToCompletedById(Long orderId);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE app.entities.Order o SET o.status = \'sent\' WHERE o.id = ?1")
+    void updateStatusToSentById(Long orderId);
+
+    @Query("SELECT o FROM app.entities.Order o WHERE o.id = ?1")
+    Order getOrderById(Long orderId);
 }

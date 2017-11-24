@@ -80,7 +80,24 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
 
-       return productRepository.getAllProductsPageable(new PageRequest(page, 10));
+       return productRepository.getAllProductsPageable(new PageRequest(page, 12));
+    }
+
+    @Override
+    public List<Product> getProductsByCategoryIdAndPage(Long categoryId, int page) {
+        return productRepository.getProductsByCategoryIdAndPage(categoryId, new PageRequest(page, 12));
+    }
+
+    @Override
+    public List<Product> getProductsByWordAndPage(String word, int page) {
+        return productRepository.getProductsByWordAndPage(word, new PageRequest(page, 12));
+    }
+
+    @Override
+    public List<Product> getProductsByCategoryIdAndWordAndPage(Long categoryId, String word, int page) {
+        return productRepository.getProductsByCategoryIdAndWordAndPage(
+                categoryId, word, new PageRequest(page, 12)
+        );
     }
 
     @Override
@@ -101,6 +118,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void setMainImageNameByProductId(String imageName, Long productId) {
         productRepository.setMainImageNameByProductId(imageName, productId);
+    }
+
+    @Override
+    public void deleteProductById(Long productId) {
+        productRepository.delete(productId);
+    }
+
+    @Override
+    public void deleteCategoryById(Long categoryId) {
+        categoryRepository.delete(categoryId);
     }
 
 }

@@ -20,10 +20,28 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products")
-    private ResponseEntity<?> getAllProductsPage(
+    private ResponseEntity<?> getProducts(
+            @RequestParam(value = "searchWord", required = false) String searchWord,
+            @RequestParam(value = "categoryId", defaultValue = "-1") Long categoryId,
             @RequestParam(value = "page", defaultValue = "0") int page) {
 
-        List<Product> products = productService.getAllProductsByPage(page);
+        List<Product> products;
+
+
+        if(searchWord == null) {
+            // If there is no category chosen return all products.
+            if (categoryId == -1)
+                products = productService.getAllProductsByPage(page);
+            else
+                products = productService.getProductsByCategoryIdAndPage(categoryId, page);
+        }
+
+        else {
+            if (categoryId == -1)
+                products = productService.getProductsByWordAndPage(searchWord, page);
+            else
+                products = productService.getProductsByCategoryIdAndWordAndPage(categoryId, searchWord, page);
+        }
 
         if(products == null) {
             return new ResponseEntity<Message>(
@@ -33,6 +51,15 @@ public class ProductController {
         }
 
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/products/{id}")
+    private ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
+        Product product = productService.getProductById(id);
+        if(product != null)
+            return new ResponseEntity<Product>(product, HttpStatus.OK);
+        else
+            return new ResponseEntity<Message>(new Message(true), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/categories")
@@ -48,14 +75,5 @@ public class ProductController {
 
         Category category = productService.getCategoryById(id);
         return new ResponseEntity<Category>(category, HttpStatus.OK);
-    }
-
-    @GetMapping("/products/{id}")
-    private ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
-        Product product = productService.getProductById(id);
-        if(product != null)
-            return new ResponseEntity<Product>(product, HttpStatus.OK);
-        else
-            return new ResponseEntity<Message>(new Message(true), HttpStatus.BAD_REQUEST);
     }
 }

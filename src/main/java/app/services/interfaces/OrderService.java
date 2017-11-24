@@ -9,9 +9,11 @@ public interface OrderService {
 
     Long getOrderItemsCountByUserId(Long userId);
 
+    Order getOrderById(Long orderId);
     Order getActiveOrderByUserId(Long userId);
     Long getActiveOrderIdByUserId(Long userId);
     List<OrderItem> getOrderItemsByOrderId(Long orderId);
+    List<Order> getOrdersWithStatusCompleted(int page);
     List<Order> getOrdersWithStatusSent(int page);
     List<Order> getOrdersWithStatusSentAndCompletedById(Long userId, int page);
 
@@ -21,6 +23,7 @@ public interface OrderService {
     void setActiveOrderStatusToSent(Order order);
     void setSentOrderStatusToCompleted(Long orderId);
     void updateOrderItemByOrderItemIdAndQuantityAndOrderId(Long orderItemId, int quantity, Long orderId);
+    void updateOrderStatusToSentById(Long orderId);
 
     void deleteOrderItemByIdAndOrderId(Long orderItemId, Long orderId);
 }

@@ -15,6 +15,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product AS p ORDER BY id DESC")
     List<Product> getAllProductsPageable(Pageable pageable);
 
+    @Query("SELECT p FROM Product p join p.categories c WHERE (c.id = ?1) ORDER BY p.id DESC")
+    List<Product> getProductsByCategoryIdAndPage(Long categoryId, Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE p.title LIKE CONCAT('%', ?1, '%') ORDER BY p.id DESC")
+    List<Product> getProductsByWordAndPage(String word, Pageable pageable);
+
+    @Query("SELECT p FROM Product p join p.categories c WHERE c.id = ?1 AND p.title LIKE CONCAT('%', ?2, '%') ORDER BY p.id DESC")
+    List<Product> getProductsByCategoryIdAndWordAndPage(Long categoryId, String word, Pageable pageable);
+
     Product findByTitle(String title);
 
     @Transactional

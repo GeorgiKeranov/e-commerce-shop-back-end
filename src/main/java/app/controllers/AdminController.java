@@ -1,8 +1,6 @@
 package app.controllers;
 
-import app.entities.Category;
-import app.entities.Order;
-import app.entities.Product;
+import app.entities.*;
 import app.models.Message;
 import app.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -26,9 +23,6 @@ public class AdminController {
 
     @Autowired
     private StorageService storageService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ImageService imageService;
@@ -137,6 +131,15 @@ public class AdminController {
         return new ResponseEntity<Message>(new Message(false), HttpStatus.OK);
     }
 
+    @DeleteMapping("products/{id}")
+    private ResponseEntity<Message> deleteExistingProduct(@PathVariable("id") Long id) {
+
+        productService.deleteProductById(id);
+
+        return new ResponseEntity<Message>(new Message(false), HttpStatus.OK);
+    }
+
+
     @PostMapping("/categories/create")
     private ResponseEntity<Message> createNewCategory(@RequestBody Category category) {
         // TODO
@@ -152,11 +155,21 @@ public class AdminController {
     }
 
     @GetMapping("/orders")
-    private ResponseEntity<?> getOrdersWithStatusSent(@RequestParam("page") int page) {
+    private ResponseEntity<?> getOrdersWithStatus(
+            @RequestParam("status") String status,
+            @RequestParam(value = "page", required = false) Integer page) {
 
-        List<Order> orders = orderService.getOrdersWithStatusSent(page);
+        if(page == null)
+            page = 0;
 
-        if(orders.size() == 0) {
+        List<Order> orders = null;
+
+        switch(status) {
+            case "sent": orders = orderService.getOrdersWithStatusSent(page); break;
+            case "completed": orders = orderService.getOrdersWithStatusCompleted(page); break;
+        }
+
+        if(orders == null || orders.size() == 0) {
             return new ResponseEntity<Message>(
                     new Message(false, "No orders found."),
                     HttpStatus.OK
@@ -166,7 +179,7 @@ public class AdminController {
         return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
     }
 
-    @PostMapping("/orders/{id}/complete")
+    @PostMapping("/orders/complete/{id}")
     private ResponseEntity<Message> completeOrderById(@PathVariable("id") Long orderId) {
 
 
@@ -178,5 +191,57 @@ public class AdminController {
                 HttpStatus.OK
         );
     }
+
+    @PutMapping("/orders/complete/{id}")
+    private ResponseEntity<Message> updateOrderStatusToSent(@PathVariable("id") Long orderId) {
+
+        orderService.updateOrderStatusToSentById(orderId);
+
+        return new ResponseEntity<Message>(new Message(false), HttpStatus.OK);
+    }
+
+    @GetMapping("/orders/{id}")
+    private ResponseEntity<?> getOrderById(@PathVariable("id") Long orderId) {
+
+        Order order = orderService.getOrderById(orderId);
+
+        if(order == null)
+            return new ResponseEntity<Message>(
+                    new Message(true, "Order doesn\'t exists"),
+                    HttpStatus.NOT_FOUND
+            );
+
+        else return new ResponseEntity<Order>(order, HttpStatus.OK);
+    }
+
+    @GetMapping("/orders/{id}/user")
+    private ResponseEntity<?> getUserByOrderID(@PathVariable("id") Long orderId) {
+
+        User user = (orderService.getOrderById(orderId)).getUser();
+
+        if(user == null)
+            return new ResponseEntity<Message>(
+                    new Message(true, "Order doesn\'t exists"),
+                    HttpStatus.NOT_FOUND
+            );
+
+        else return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/orders/{id}/items")
+    private ResponseEntity<?> getOrderItemsByOrderId(@PathVariable("id") Long orderId) {
+
+        Order order = orderService.getOrderById(orderId);
+
+        if(order == null)
+            return new ResponseEntity<Message>(
+                    new Message(true, "Order with that id doesn\'t exists"),
+                    HttpStatus.NOT_FOUND
+            );
+
+        else return new ResponseEntity<List<OrderItem>>(order.getOrderItems(), HttpStatus.OK);
+
+    }
+
 
 }

@@ -3,6 +3,7 @@ package app.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,7 @@ public class Order {
 
     private String status = "active";
 
+    @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 
@@ -52,5 +54,23 @@ public class Order {
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    public int getPrice() {
+        int totalPrice = 0;
+
+        for(OrderItem orderItem: orderItems) {
+            totalPrice += (orderItem.getQuantity() * orderItem.getProduct().getPrice());
+        }
+
+        return totalPrice;
+    }
+
+    public String getFullName() {
+        return user.getFirstName() + " " + user.getLastName();
+    }
+
+    public String getEmail() {
+        return user.getEmail();
     }
 }

@@ -27,6 +27,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order getOrderById(Long orderId) {
+        return orderRepository.getOrderById(orderId);
+    }
+
+    @Override
     public Order getActiveOrderByUserId(Long userId) {
         return orderRepository.getActiveOrderByUserId(userId);
     }
@@ -39,6 +44,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
         return orderItemRepository.getOrderItemsByOrderId(orderId);
+    }
+
+    @Override
+    public List<Order> getOrdersWithStatusCompleted(int page) {
+        return orderRepository.getOrdersWithStatusCompleted(new PageRequest(page, 10));
     }
 
     @Override
@@ -94,6 +104,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderItemByOrderItemIdAndQuantityAndOrderId(Long orderItemId, int quantity, Long orderId) {
         orderItemRepository.updateOrderItemByOrderItemIdAndQuantityAndOrderId(orderItemId, quantity, orderId);
+    }
+
+    @Override
+    public void updateOrderStatusToSentById(Long orderId) {
+        orderRepository.updateStatusToSentById(orderId);
     }
 
     @Override
