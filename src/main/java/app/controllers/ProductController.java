@@ -2,6 +2,7 @@ package app.controllers;
 
 import app.entities.Category;
 import app.entities.Product;
+import app.models.Count;
 import app.models.Message;
 import app.services.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class ProductController {
 
         if(products == null) {
             return new ResponseEntity<Message>(
-                    new Message(true, "Invalid page requested"),
+                    new Message(true, "No products found"),
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -60,6 +61,38 @@ public class ProductController {
             return new ResponseEntity<Product>(product, HttpStatus.OK);
         else
             return new ResponseEntity<Message>(new Message(true), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/products/count")
+    private ResponseEntity<Count> getProducts(
+            @RequestParam(value = "searchWord", defaultValue = "") String searchWord,
+            @RequestParam(value = "categoryId", defaultValue = "-1") Long categoryId
+    ) {
+
+        Count count = new Count();
+
+        count.setCount(0L);
+
+        // if there are no searchWord and categoryId returning
+        // count of pages for all products
+        if(searchWord.equals("") && categoryId == -1)
+            count.setCount(productService.getCountOfPagesForAllProducts());
+
+        // If only categoryId is present returning count of pages
+        // only for that category.
+        if(searchWord.equals("") && categoryId >= 0)
+            count.setCount(productService.getCountOfPagesForProductsByCategoryId(categoryId));
+
+        // If only searchWord is present returning
+        // count of pages with products containing that word.
+        if(!searchWord.equals("") && categoryId == -1)
+            count.setCount(productService.getCountOfPagesForProductsByWord(searchWord));
+
+        if(!searchWord.equals("") && categoryId >= 0)
+            count.setCount(productService.getCountOfPagesForProductsByCategoryIdAndWord(categoryId, searchWord));
+
+
+        return new ResponseEntity<Count>(count, HttpStatus.OK);
     }
 
     @GetMapping("/categories")

@@ -4,7 +4,7 @@ import app.entities.Order;
 import app.entities.OrderItem;
 import app.entities.User;
 import app.models.Message;
-import app.models.OrderItemsCount;
+import app.models.Count;
 import app.services.interfaces.OrderService;
 import app.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class OrderController {
@@ -27,13 +26,13 @@ public class OrderController {
     private UserService userService;
 
     @GetMapping("/order/items/count")
-    private ResponseEntity<OrderItemsCount> getOrderItemsCount(Principal principal) {
+    private ResponseEntity<Count> getOrderItemsCount(Principal principal) {
         Long userId = userService.getUserIdByUsername(principal.getName());
         Long itemCount = orderService.getOrderItemsCountByUserId(userId);
 
-        OrderItemsCount orderItemsCount = new OrderItemsCount(itemCount);
+        Count count = new Count(itemCount);
 
-        return new ResponseEntity<OrderItemsCount>(orderItemsCount, HttpStatus.OK);
+        return new ResponseEntity<Count>(count, HttpStatus.OK);
     }
 
     @PostMapping("/order/items")

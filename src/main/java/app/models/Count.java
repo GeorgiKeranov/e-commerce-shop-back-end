@@ -1,10 +1,12 @@
 package app.models;
 
-public class OrderItemsCount {
+public class Count {
 
     private Long count;
 
-    public OrderItemsCount(Long count) {
+    public Count() { }
+
+    public Count(Long count) {
         this.count = count;
     }
 

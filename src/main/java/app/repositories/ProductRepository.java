@@ -24,6 +24,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p join p.categories c WHERE c.id = ?1 AND p.title LIKE CONCAT('%', ?2, '%') ORDER BY p.id DESC")
     List<Product> getProductsByCategoryIdAndWordAndPage(Long categoryId, String word, Pageable pageable);
 
+    @Query("SELECT COUNT(p) FROM Product p")
+    Long getCountOfPagesForAllProducts();
+
+    @Query("SELECT COUNT(p) FROM Product p JOIN p.categories c WHERE c.id = ?1")
+    Long getCountOfPagesForProductsByCategoryId(Long categoryId);
+
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.title LIKE CONCAT('%', ?1, '%')")
+    Long getCountOfPagesForProductsByWord(String searchWord);
+
+    @Query("SELECT COUNT(p) FROM Product p JOIN p.categories c WHERE c.id = ?1 AND p.title LIKE CONCAT('%', ?2, '%')")
+    Long getCountOfPagesForProductsByCategoryIdAndWord(Long categoryId, String searchWord);
+
     Product findByTitle(String title);
 
     @Transactional

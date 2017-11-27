@@ -116,6 +116,66 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Long getCountOfPagesForAllProducts() {
+        // Getting count of products and divide it to 12 ( our count of products for 1 page)
+        // To get the count of maximum pages.
+        Long countOfProducts = productRepository.getCountOfPagesForAllProducts();
+        Long countOfPages = countOfProducts / 12;
+
+        // Adding one more page if they are more products
+        if(countOfProducts % 12 != 0) {
+            countOfPages++;
+        }
+
+        return countOfPages;
+    }
+
+    @Override
+    public Long getCountOfPagesForProductsByCategoryId(Long categoryId) {
+        // Getting count of products and divide it to 12 ( our count of products for 1 page)
+        // To get the count of maximum pages.
+        Long countOfProducts = productRepository.getCountOfPagesForProductsByCategoryId(categoryId);
+        Long countOfPages = countOfProducts / 12;
+
+        // Adding one more page if they are more products
+        if(countOfProducts % 12 != 0) {
+            countOfPages++;
+        }
+
+        return countOfPages;
+    }
+
+    @Override
+    public Long getCountOfPagesForProductsByWord(String searchWord) {
+        // Getting count of products and divide it to 12 ( our count of products for 1 page)
+        // To get the count of maximum pages.
+        Long countOfProducts = productRepository.getCountOfPagesForProductsByWord(searchWord);
+        Long countOfPages = countOfProducts / 12;
+
+        // Adding one more page if they are more products
+        if(countOfProducts % 12 != 0) {
+            countOfPages++;
+        }
+
+        return countOfPages;
+    }
+
+    @Override
+    public Long getCountOfPagesForProductsByCategoryIdAndWord(Long categoryId, String searchWord) {
+        // Getting count of products and divide it to 12 ( our count of products for 1 page)
+        // To get the count of maximum pages.
+        Long countOfProducts = productRepository.getCountOfPagesForProductsByCategoryIdAndWord(categoryId, searchWord);
+        Long countOfPages = countOfProducts / 12;
+
+        // Adding one more page if they are more products
+        if(countOfProducts % 12 != 0) {
+            countOfPages++;
+        }
+
+        return countOfPages;
+    }
+
+    @Override
     public void setMainImageNameByProductId(String imageName, Long productId) {
         productRepository.setMainImageNameByProductId(imageName, productId);
     }
