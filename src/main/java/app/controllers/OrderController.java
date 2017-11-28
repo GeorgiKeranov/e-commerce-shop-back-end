@@ -36,13 +36,13 @@ public class OrderController {
     }
 
     @PostMapping("/order/items")
-    private ResponseEntity<?> addOrderItemToOrder(@RequestBody OrderItem orderItem,
+    private ResponseEntity<Message> addOrderItemToOrder(@RequestBody OrderItem orderItem,
                                                   Principal principal) {
 
-        // Validate requested OrderItem.
+        // Validate requested Product form the orderItem.
         if(orderItem.getProduct().getId() == null) {
             return new ResponseEntity<Message>(
-                    new Message(true, "No id for product"),
+                    new Message(true, "Product with that id is not existing"),
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -52,8 +52,8 @@ public class OrderController {
         orderService.saveOrderItem(orderItem, userId);
 
         return new ResponseEntity<Message>(
-                new Message(false, "successful")
-                , HttpStatus.OK
+                new Message(false, "Product was successful added to your shopping cart"),
+                HttpStatus.OK
         );
     }
 

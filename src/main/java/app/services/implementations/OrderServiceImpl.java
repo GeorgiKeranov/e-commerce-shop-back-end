@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
         );
 
         if(oldOrderItem != null) {
-            oldOrderItem.setQuantity(oldOrderItem.getQuantity() + 1);
+            oldOrderItem.setQuantity(oldOrderItem.getQuantity() + orderItem.getQuantity());
             orderItemRepository.save(oldOrderItem);
         }
         else {
