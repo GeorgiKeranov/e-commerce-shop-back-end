@@ -61,19 +61,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateCategory(Category category) {
-
-        // Getting the old category by id.
-        Category oldCategory = categoryRepository.getOne(category.getId());
-        if(oldCategory != null) {
-            // Setting the new category name on the old category object.
-            oldCategory.setCategoryName(category.getCategoryName());
-        }
-
-        categoryRepository.save(oldCategory);
-    }
-
-    @Override
     public List<Product> getAllProductsByPage(int page) {
 
         if(page < 0) {

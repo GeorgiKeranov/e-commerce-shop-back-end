@@ -141,16 +141,50 @@ public class AdminController {
 
 
     @PostMapping("/categories/create")
-    private ResponseEntity<Message> createNewCategory(@RequestBody Category category) {
-        // TODO
+    private ResponseEntity<Message> createNewCategory(
+            @RequestParam(value="categoryName") String categoryName,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+
+        Category category = new Category(categoryName);
+
+        if(image != null && !image.isEmpty()) {
+            String imageName = storageService.saveImage(image);
+            category.setImageName(imageName);
+        }
+
         productService.saveCategory(category);
         return new ResponseEntity<Message>(new Message(false), HttpStatus.OK);
     }
 
     @PostMapping("/categories/update")
-    private ResponseEntity<Message> updateCategory(@RequestBody Category category) {
-        // TODO
-        productService.updateCategory(category);
+    private ResponseEntity<Message> updateCategory(
+            @RequestParam("id") Long id,
+            @RequestParam(value = "categoryName", required = false) String categoryName,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+
+        Category category = productService.getCategoryById(id);
+        if(category == null)
+            return new ResponseEntity<Message>(
+                    new Message(true, "Category with that id is not existing"),
+                    HttpStatus.NOT_FOUND
+            );
+
+        // If there is image in request
+        if(image != null && !image.isEmpty()) {
+            // If there is already an image in the category
+            // we are deleting it from the local storage.
+            if(category.getImageName() != null && !category.getImageName().equals(""))
+                storageService.deleteImage(category.getImageName());
+
+            // Saving the new image in local storage.
+            String imageName = storageService.saveImage(image);
+            category.setImageName(imageName);
+        }
+
+        if(categoryName != null && !categoryName.equals(""))
+            category.setCategoryName(categoryName);
+
+        productService.saveCategory(category);
         return new ResponseEntity<Message>(new Message(false), HttpStatus.OK);
     }
 

@@ -12,10 +12,16 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String imageName;
+
     private String categoryName;
 
     public Category() {
 
+    }
+
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public Category(Long id) {
@@ -48,5 +54,13 @@ public class Category {
 
     public void setProducts(Set<Product> products) {
         this.products = products;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }

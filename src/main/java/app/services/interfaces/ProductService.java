@@ -14,7 +14,6 @@ public interface ProductService {
     void saveCategory(Category category);
 
     String update(Product product);
-    void updateCategory(Category category);
     void setMainImageNameByProductId(String imageName, Long productId);
 
     void deleteProductById(Long productId);
