@@ -188,6 +188,15 @@ public class AdminController {
         return new ResponseEntity<Message>(new Message(false), HttpStatus.OK);
     }
 
+    @DeleteMapping("/categories/{id}")
+    private ResponseEntity<Message> deleteExistingCategory(@PathVariable("id") Long id) {
+
+        productService.deleteCategoryById(id);
+
+        return new ResponseEntity<Message>(new Message(false), HttpStatus.OK);
+    }
+
+
     @GetMapping("/orders")
     private ResponseEntity<?> getOrdersWithStatus(
             @RequestParam("status") String status,
