@@ -199,17 +199,13 @@ public class AdminController {
 
     @GetMapping("/orders")
     private ResponseEntity<?> getOrdersWithStatus(
-            @RequestParam("status") String status,
-            @RequestParam(value = "page", required = false) Integer page) {
-
-        if(page == null)
-            page = 0;
+            @RequestParam("status") String status) {
 
         List<Order> orders = null;
 
         switch(status) {
-            case "sent": orders = orderService.getOrdersWithStatusSent(page); break;
-            case "completed": orders = orderService.getOrdersWithStatusCompleted(page); break;
+            case "sent": orders = orderService.getOrdersWithStatusSent(); break;
+            case "completed": orders = orderService.getOrdersWithStatusCompleted(); break;
         }
 
         if(orders == null || orders.size() == 0) {

@@ -47,21 +47,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrdersWithStatusCompleted(int page) {
-        return orderRepository.getOrdersWithStatusCompleted(new PageRequest(page, 10));
+    public List<Order> getOrdersWithStatusCompleted() {
+        return orderRepository.getOrdersWithStatusCompleted();
     }
 
     @Override
-    public List<Order> getOrdersWithStatusSent(int page) {
-        return orderRepository.getOrdersWithStatusSent(new PageRequest(page, 10));
+    public List<Order> getOrdersWithStatusSent() {
+        return orderRepository.getOrdersWithStatusSent();
     }
 
     @Override
-    public List<Order> getOrdersWithStatusSentAndCompletedById(Long userId, int page) {
-        return orderRepository.getOrdersWithStatusSentAndCompletedById(
-                userId,
-                new PageRequest(page, 10)
-        );
+    public List<Order> getOrdersWithStatusSentAndCompletedById(Long userId) {
+        return orderRepository.getOrdersWithStatusSentAndCompletedById(userId);
     }
 
     @Override

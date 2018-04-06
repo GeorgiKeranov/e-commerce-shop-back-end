@@ -13,9 +13,9 @@ public interface OrderService {
     Order getActiveOrderByUserId(Long userId);
     Long getActiveOrderIdByUserId(Long userId);
     List<OrderItem> getOrderItemsByOrderId(Long orderId);
-    List<Order> getOrdersWithStatusCompleted(int page);
-    List<Order> getOrdersWithStatusSent(int page);
-    List<Order> getOrdersWithStatusSentAndCompletedById(Long userId, int page);
+    List<Order> getOrdersWithStatusCompleted();
+    List<Order> getOrdersWithStatusSent();
+    List<Order> getOrdersWithStatusSentAndCompletedById(Long userId);
 
     void saveOrder(Order order);
     void saveOrderItem(OrderItem orderItem, Long userId);

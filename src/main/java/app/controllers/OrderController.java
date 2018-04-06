@@ -136,13 +136,12 @@ public class OrderController {
     }
 
     @GetMapping("/orders/history")
-    private ResponseEntity<List<Order>> getUserOrdersHistory(@RequestParam("page") int page,
-                                                             Principal principal) {
+    private ResponseEntity<List<Order>> getUserOrdersHistory(Principal principal) {
 
         Long userId = userService.getUserIdByUsername(principal.getName());
 
         List<Order> sentAndCompletedOrders =
-                orderService.getOrdersWithStatusSentAndCompletedById(userId, page);
+                orderService.getOrdersWithStatusSentAndCompletedById(userId);
 
         return new ResponseEntity<List<Order>>(sentAndCompletedOrders, HttpStatus.OK);
     }
