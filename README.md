@@ -453,8 +453,6 @@ Not required param -> image(file).
 ```
 <br/>
 
-## REST Documentation for User with role ROLE_ADMIN:
-
 ### POST /admin/products/update -> Update existing product.
 Required param -> tile, description, price, productCategories(id of the category that this product will be in).
 Not required param -> image(file).
@@ -470,6 +468,44 @@ Not required param -> image(file).
 
 ### DELETE /admin/products/{id} -> Delete existing product by id.
 Required param -> id (id of the product).
+
+#### Response:
+```JavaScript
+{
+    "message": null,
+    "error": false
+}
+```
+<br/>
+
+### POST /admin/categories/create -> Create new category.
+Required param -> categoryName.
+Not required param -> image(file).
+
+#### Response:
+```JavaScript
+{
+    "message": null,
+    "error": false
+}
+```
+<br/>
+
+### PUT /admin/categories/create -> Update existing category.
+Required param -> categoryName.
+Not required param -> image(file).
+
+#### Response:
+```JavaScript
+{
+    "message": null,
+    "error": false
+}
+```
+<br/>
+
+### DELETE /admin/categories/create -> Delete existing category.
+Required param -> id (id of the category).
 
 #### Response:
 ```JavaScript
