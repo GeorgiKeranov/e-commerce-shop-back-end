@@ -261,18 +261,7 @@ Not required params -> searchWord, categoryId
 #### Response:
 ```JavaScript
 {
-    "id": 13,
-    "title": "SONY HDR-PJ410B",
-    "description": "Resolution : 9.2 MPx\r\nType : FLASH MEMORY\r\nDisplay in inch : 2.7 \"\r\nDigital approach : x350",
-    "price": 250,
-    "mainImageName": "9015824646174.jpg",
-    "categories": [
-        {
-            "id": 7,
-            "imageName": "EOS-M10_001.png",
-            "categoryName": "Cameras"
-        }
-    ]
+    "count": 2
 }
 ```
 <br/>
