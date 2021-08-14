@@ -1,50 +1,116 @@
 # E-Commerce-Shop-Back-End
 
-Spring REST service for e commerce shop. The shop have two type of users admins and normal users. Admins can create, edit or delete categories and products. They can check sent orders by users and to complete them. Users have shopping cart. They can search products by categories or by keywords and to order them. All the products are paginated.
+E-commerce shop REST API created with Java and Spring Framework.
 
-## Technologies used:
+You can view the front end of this e-commerce shop that is built with Angular [here](https://github.com/GeorgiKeranov/E-Commerce-Shop-Front-End).
 
-Spring MVC, Spring Boot, Spring Data, Spring Security, JSON, MySQL, JWT(Json Web Token).
+## Table of contents
+- [Technologies used](#technologies-used)
+- [Functionalities](#functionalities)
+- [REST Documentation](#rest-documentation)
+    - [Register new user](#register-new-user)
+    - [Login in your account](#login-in-your-account)
+    - [Get authenticated user's information](#get-authenticated-users-information)
+    - [Get products](#get-products)
+    - [Get product by id](#get-product-by-id)
+    - [Get products count](#get-products-count)
+    - [Get all categories](#get-all-categories)
+    - [Get category by id](#get-category-by-id)
+    - [Count of the order items in shopping cart of authenticated user](#count-of-the-order-items-in-shopping-cart-of-authenticated-user)
+    - [Get order items in the shopping cart of authenticated user](#get-order-items-in-the-shopping-cart-of-authenticated-user)
+    - [Add order item to shopping cart](#add-order-item-to-shopping-cart)
+    - [Delete order item from shopping cart](#delete-order-item-from-shopping-cart)
+    - [Update order item quantity](#update-order-item-quantity)
+    - [Buy products from the shopping cart](#buy-products-from-the-shopping-cart)
+    - [Create a new product](#create-a-new-product)
+    - [Update existing product](#update-existing-product)
+    - [Delete product by id](#delete-product-by-id)
+    - [Create new category](#create-new-category)
+    - [Update existing category](#update-existing-category)
+    - [Delete existing category](#delete-existing-category)
+    - [Get orders by status](#get-orders-by-status)
+    - [Change order status to completed](#change-order-status-to-completed)
+    - [Change order status to sent](#change-order-status-to-sent)
+    - [Get user by order id](#get-user-by-order-id)
+    - [Get items by order id](#get-items-by-order-id)
 
-## REST Documentation for User with role ROLE_USER:
+## Technologies used
+- Java
+- Spring Boot
+- Spring MVC
+- Spring Data
+- Spring Security
+- JSON
+- MySQL
+- JWT (Json Web Token)
 
-### POST /register -> Register new user.
-Required parameters -> firstName, lastName, username, email, password, country, address, phone.
+## Functionalities
 
-#### Successful register response:
+The project has authentication system with JWT (Json Web Token).\
+Customers can register add products to their cart and then purchase them.
+
+There are two roles for users:
+- Admin. Their role can:
+    - Create categories and products
+    - Edit categories and products
+    - Delete categories and products
+    - View orders from the users
+    - Complete orders from the users
+    - Remove orders from the users
+- User. Their role can:
+    - Search products by categories or by words
+    - Add products to their cart
+    - Change products quantity dynamically in their cart
+    - Remove product dynamically in their cart.
+    - Purchase the products from the cart
+
+## REST Documentation
+
+### Register new user
+URL: `/register`\
+Method: `POST`\
+Required parameters: `firstName, lastName, username, email, password, country, address, phone`
+
+#### Response:
 ```JavaScript
 {
     "message": "You have been registered successful",
     "error": false
 }
 ```
-<br/>
 
-### POST /login -> Login in your account.
-Required parameters -> username and password.
+--------------------------------------------------
 
-#### Successful login response:
+### Login in your account
+URL: `/login`\
+Method: `POST`\
+Required parameters: `username, password`
+
+#### Response:
 ```JavaScript
 {
     "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXVkIjoid2ViIiwiZXhwIjoxNTIzNjU3ODI0LCJpYXQiOjE1MjMwNTMwMjR9.SanbUbyaKcGOmCxYCnmrBKI9_aSAu__Vg18CzN5XBoAU9JohkbdS38apLwHmokcocdjImScz2qnG57we_ahohA"
 }
 ```
-<br/>
 
-### GET /user -> Get authenticated user's information.
-Required -> Token from login in Authorization header.
+--------------------------------------------------
+
+### Get authenticated user's information
+URL: `/user`\
+Method: `GET`\
+Required parameters: `token`
 
 #### Response:
 ```JavaScript
 {
     "id": 3,
-    "username": "test",
-    "country": "Bg",
-    "address": "asd 123",
-    "email": "test@abv.bg",
-    "firstName": "Test",
-    "lastName": "Test",
-    "phone": "08900323",
+    "username": "john.doe",
+    "country": "USA",
+    "address": "st. John Doe 2",
+    "email": "john.doe@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "+123456789",
     "roles": [
         {
             "id": 1,
@@ -53,10 +119,13 @@ Required -> Token from login in Authorization header.
     ]
 }
 ```
-<br/>
 
-### GET /products -> Get products ( by searchWord/categoryId,page OPTIONAL).
-Not required params -> searchWord, categoryId, page.
+--------------------------------------------------
+
+### Get products
+URL: `/products`\
+Method: `GET`\
+Optional parameters: `searchWord, categoryId, page`
 
 #### Response:
 ```JavaScript
@@ -89,152 +158,15 @@ Not required params -> searchWord, categoryId, page.
             }
         ]
     },
-    {
-        "id": 13,
-        "title": "SONY HDR-PJ410B",
-        "description": "Resolution : 9.2 MPx\r\nType : FLASH MEMORY\r\nDisplay in inch : 2.7 \"\r\nDigital approach : x350",
-        "price": 250,
-        "mainImageName": "9015824646174.jpg",
-        "categories": [
-            {
-                "id": 7,
-                "imageName": "EOS-M10_001.png",
-                "categoryName": "Cameras"
-            }
-        ]
-    },
-    {
-        "id": 12,
-        "title": "PANASONIC HC-V160EP-K",
-        "description": "",
-        "price": 160,
-        "mainImageName": "8977509351454.jpg",
-        "categories": [
-            {
-                "id": 7,
-                "imageName": "EOS-M10_001.png",
-                "categoryName": "Cameras"
-            }
-        ]
-    },
-    {
-        "id": 11,
-        "title": "LENOVO YOGA ZA0V0210BG",
-        "description": "",
-        "price": 700,
-        "mainImageName": "9835454103582.jpg",
-        "categories": [
-            {
-                "id": 2,
-                "imageName": "yoga-900-header-hero.png",
-                "categoryName": "Laptops"
-            }
-        ]
-    },
-    {
-        "id": 10,
-        "title": "DELL INSPIRON 3567 /994281",
-        "description": "",
-        "price": 550,
-        "mainImageName": "10083868377118.jpg",
-        "categories": [
-            {
-                "id": 2,
-                "imageName": "yoga-900-header-hero.png",
-                "categoryName": "Laptops"
-            }
-        ]
-    },
-    {
-        "id": 9,
-        "title": "ASUS T300FA-FE004H",
-        "description": "",
-        "price": 350,
-        "mainImageName": "9507688480798.jpg",
-        "categories": [
-            {
-                "id": 2,
-                "imageName": "yoga-900-header-hero.png",
-                "categoryName": "Laptops"
-            }
-        ]
-    },
-    {
-        "id": 8,
-        "title": "ACER ASPIRE ES1-132-C81F /RED",
-        "description": "",
-        "price": 250,
-        "mainImageName": "10385245536286.jpg",
-        "categories": [
-            {
-                "id": 2,
-                "imageName": "yoga-900-header-hero.png",
-                "categoryName": "Laptops"
-            }
-        ]
-    },
-    {
-        "id": 7,
-        "title": "NOKIA 8 BLUE",
-        "description": "?????? ?? ?????? ? INCH : 5.3 \"\r\n?????????? ?? ??????? : IPS CAPACITIVE TOUCHSCREEN\r\n???????? : 2.5GHz Quad+1.8 Quad Core\r\n???? ?? ????? ? ?????\r\n????? ?????? : 13.0 MPx\r\nBLUETOOTH\r\n4G",
-        "price": 400,
-        "mainImageName": "10504947564574.jpg",
-        "categories": [
-            {
-                "id": 1,
-                "imageName": "PCD-Filtertype-Note8-dsb.png",
-                "categoryName": "Smartphones"
-            }
-        ]
-    },
-    {
-        "id": 6,
-        "title": "APPLE IPHONE 7 32GB GOLD",
-        "description": "?????? ?? ?????? ? INCH : 4.7 \"\r\n?????????? ?? ??????? : RETINA HD 3D TOUCHSCREEN\r\n???????? : APPLE A10 64-bit\r\n????? ?????? : 12.0 MPx\r\nBLUETOOTH\r\n4G",
-        "price": 920,
-        "mainImageName": "9754986151966.jpg",
-        "categories": [
-            {
-                "id": 1,
-                "imageName": "PCD-Filtertype-Note8-dsb.png",
-                "categoryName": "Smartphones"
-            }
-        ]
-    },
-    {
-        "id": 5,
-        "title": "APPLE IPHONE X 256GB SPACE GRAY",
-        "description": "??????????? ?????\r\n?????? ? ??????\r\n??????\r\n????? ?? ???????\r\n?????? ?? ?????? ? INCH : 5.8 \"\r\n?????????? ?? ??????? : OLED Super Retina\r\n???????? : A11 64-Bit\r\n????? ?????? : 12.0 MPx\r\nBLUETOOTH\r\n4G",
-        "price": 1850,
-        "mainImageName": "10411580063774.jpg",
-        "categories": [
-            {
-                "id": 1,
-                "imageName": "PCD-Filtertype-Note8-dsb.png",
-                "categoryName": "Smartphones"
-            }
-        ]
-    },
-    {
-        "id": 4,
-        "title": "APPLE IPHONE 8 256GB GOLD",
-        "description": "?????? ?? ?????? ? INCH : 4.7 \"\r\n?????????? ?? ??????? : Retina HD\r\n???????? : A11 64-Bit\r\n????? ?????? : 12.0 MPx\r\nBLUETOOTH\r\n4G",
-        "price": 900,
-        "mainImageName": "10359757864990.jpg",
-        "categories": [
-            {
-                "id": 1,
-                "imageName": "PCD-Filtertype-Note8-dsb.png",
-                "categoryName": "Smartphones"
-            }
-        ]
-    }
+   ...
 ]
 ```
-<br/>
 
-### GET /products/{id} -> Get product by id.
-Required param -> id.
+--------------------------------------------------
+
+### Get product by id
+URL: `/products/{id}`\
+Method: `GET`
 
 #### Response:
 ```JavaScript
@@ -253,10 +185,13 @@ Required param -> id.
     ]
 }
 ```
-<br/>
 
-### GET /products/count -> Get products count.
-Not required params -> searchWord, categoryId
+--------------------------------------------------
+
+### Get products count
+URL: `/products/count`\
+Method: `GET`\
+Optional parameters: `searchWord, categoryId`
 
 #### Response:
 ```JavaScript
@@ -264,9 +199,12 @@ Not required params -> searchWord, categoryId
     "count": 2
 }
 ```
-<br/>
 
-### GET /categories -> Get all categories.
+--------------------------------------------------
+
+### Get all categories
+URL: `/categories`\
+Method: `GET`
 
 #### Response:
 ```JavaScript
@@ -281,36 +219,15 @@ Not required params -> searchWord, categoryId
         "imageName": "yoga-900-header-hero.png",
         "categoryName": "Laptops"
     },
-    {
-        "id": 5,
-        "imageName": "lenovo-desktop-legion-y720-tower-feature-2.png",
-        "categoryName": "Desktops"
-    },
-    {
-        "id": 6,
-        "imageName": "tablets-repair.png",
-        "categoryName": "Tablets"
-    },
-    {
-        "id": 7,
-        "imageName": "EOS-M10_001.png",
-        "categoryName": "Cameras"
-    },
-    {
-        "id": 8,
-        "imageName": "DSC_0964__67640.1499289859.webp",
-        "categoryName": "Action cameras"
-    },
-    {
-        "id": 10,
-        "imageName": "107894522511661.jpg",
-        "categoryName": "MicroSD Edited!"
-    }
+    ...
 ]
 ```
-<br/>
 
-### GET /categories/{id} -> Get category by id.
+--------------------------------------------------
+
+### Get category by id
+URL: `/categories/{id}`\
+Method: `GET`
 
 #### Response:
 ```JavaScript
@@ -320,9 +237,12 @@ Not required params -> searchWord, categoryId
     "categoryName": "Smartphones"
 }
 ```
-<br/>
 
-### GET /order/items/count -> Count of the order items in shopping cart of authenticated user.
+--------------------------------------------------
+
+### Count of the order items in shopping cart of authenticated user
+URL: `/order/items/count`\
+Method: `GET`
 
 #### Response:
 ```JavaScript
@@ -330,9 +250,12 @@ Not required params -> searchWord, categoryId
     "count": 4
 }
 ```
-<br/>
 
-### GET /order/items -> Get order items in the shopping cart of authenticated user.
+--------------------------------------------------
+
+### Get order items in the shopping cart of authenticated user
+URL: `/order/items`\
+Method: `GET`
 
 #### Response:
 ```JavaScript
@@ -373,15 +296,19 @@ Not required params -> searchWord, categoryId
         },
         "quantity": 3
     }
+    ...
 ]
 ```
-<br/>
 
-### POST /order/items -> Add order item to shopping cart.
-Required param -> product -> id.
-Not required param -> quantity.
+--------------------------------------------------
 
-#### Request (JSON)
+### Add order item to shopping cart
+URL: `/order/items`\
+Method: `POST`\
+Required parameters: `product.id`\
+Optional parameters: `quantity`
+
+#### Request body (JSON):
 ```JavaScript
 {
     "product": {
@@ -398,10 +325,12 @@ Not required param -> quantity.
     "error": false
 }
 ```
-<br/>
 
-### DELETE /order/items/{id} -> Delete order item from shopping cart.
-Required param -> id (id of the order item).
+--------------------------------------------------
+
+### Delete order item from shopping cart
+URL: `/order/items/{id}`\
+Method: `DELETE`
 
 #### Response:
 ```JavaScript
@@ -410,12 +339,15 @@ Required param -> id (id of the order item).
     "error": false
 }
 ```
-<br/>
 
-### PUT /order/items/{id} -> Update order item quantity.
-Required param -> id (id of the order item), quantity.
+--------------------------------------------------
 
-#### Example
+### Update order item quantity
+URL: `/order/items/{id}`\
+Method: `PUT`\
+Required parameters: `quantity`
+
+#### Request:
 PUT /order/items/13?quantity=4
 
 #### Response:
@@ -425,9 +357,12 @@ PUT /order/items/13?quantity=4
     "error": false
 }
 ```
-<br/>
 
-### POST /order/buy -> Buy products from the shopping cart.
+--------------------------------------------------
+
+### Buy products from the shopping cart
+URL: `/order/buy`\
+Method: `POST`
 
 #### Response:
 ```JavaScript
@@ -436,26 +371,14 @@ PUT /order/items/13?quantity=4
     "error": false
 }
 ```
-<br/>
 
-## REST Documentation for User with role ROLE_ADMIN:
+--------------------------------------------------
 
-### POST /admin/products/create -> Create new product.
-Required param -> tile, description, price, productCategories(id of the category that this product will be in).
-Not required param -> image(file).
-
-#### Response:
-```JavaScript
-{
-    "message": null,
-    "error": false
-}
-```
-<br/>
-
-### POST /admin/products/update -> Update existing product.
-Required param -> tile, description, price, productCategories(id of the category that this product will be in).
-Not required param -> image(file).
+### Create a new product
+URL: `/admin/products/create`\
+Method: `POST`\
+Required parameters: `tile, description, price, productCategories(ids of the categories that this product will be in)`\
+Optional parameters: `image(file)`
 
 #### Response:
 ```JavaScript
@@ -464,23 +387,14 @@ Not required param -> image(file).
     "error": false
 }
 ```
-<br/>
 
-### DELETE /admin/products/{id} -> Delete existing product by id.
-Required param -> id (id of the product).
+--------------------------------------------------
 
-#### Response:
-```JavaScript
-{
-    "message": null,
-    "error": false
-}
-```
-<br/>
-
-### POST /admin/categories/create -> Create new category.
-Required param -> categoryName.
-Not required param -> image(file).
+### Update existing product
+URL: `/admin/products/update`\
+Method: `POST`\
+Required parameters: `tile, description, price, productCategories(ids of the categories that this product will be in)`\
+Optional parameters: `image(file)`
 
 #### Response:
 ```JavaScript
@@ -489,23 +403,12 @@ Not required param -> image(file).
     "error": false
 }
 ```
-<br/>
 
-### PUT /admin/categories/create -> Update existing category.
-Required param -> categoryName.
-Not required param -> image(file).
+--------------------------------------------------
 
-#### Response:
-```JavaScript
-{
-    "message": null,
-    "error": false
-}
-```
-<br/>
-
-### DELETE /admin/categories/create -> Delete existing category.
-Required param -> id (id of the category).
+### Delete product by id
+URL: `/admin/products/{id}`\
+Method: `DELETE`
 
 #### Response:
 ```JavaScript
@@ -514,10 +417,63 @@ Required param -> id (id of the category).
     "error": false
 }
 ```
-<br/>
 
-### GET /admin/orders -> Get orders by status.
-Required param -> status ( sent / completed ).
+--------------------------------------------------
+
+### Create new category
+URL: `/admin/categories/create`\
+Method: `POST`\
+Required parameters: `categoryName`\
+Optional parameters: `image(file)`
+
+#### Response:
+```JavaScript
+{
+    "message": null,
+    "error": false
+}
+```
+
+--------------------------------------------------
+
+### Update existing category
+URL: `/admin/categories/update`\
+Method: `POST`\
+Required parameters: `id, categoryName`\
+Optional parameters: `image(file)`
+
+#### Response:
+```JavaScript
+{
+    "message": null,
+    "error": false
+}
+```
+
+--------------------------------------------------
+
+### Delete existing category
+URL: `/admin/categories/{id}`\
+Method: `DELETE`
+
+#### Response:
+```JavaScript
+{
+    "message": null,
+    "error": false
+}
+```
+
+--------------------------------------------------
+
+### Get orders by status
+URL: `/admin/orders`\
+Method: `GET`\
+Required parameters: `status`
+
+Parameter values `status`:
+- `sent`
+- `completed`
 
 #### Response:
 ```JavaScript
@@ -538,22 +494,12 @@ Required param -> status ( sent / completed ).
     }
 ]
 ```
-<br/>
 
-### POST /admin/orders/complete/{id} -> Change order status to completed.
-Required param -> id.
+--------------------------------------------------
 
-#### Response:
-```JavaScript
-{
-    "message": "successful",
-    "error": false
-}
-```
-<br/>
-
-### PUT /admin/orders/complete/{id} -> Change order status to sent.
-Required param -> id.
+### Change order status to completed
+URL: `/admin/orders/complete/{id}`\
+Method: `POST`
 
 #### Response:
 ```JavaScript
@@ -562,22 +508,38 @@ Required param -> id.
     "error": false
 }
 ```
-<br/>
 
-### GET /admin/orders/{id}/user -> Extract user from order.
-Required param -> id.
+--------------------------------------------------
+
+### Change order status to sent
+URL: `/admin/orders/complete/{id}`\
+Method: `PUT`
+
+#### Response:
+```JavaScript
+{
+    "message": "successful",
+    "error": false
+}
+```
+
+--------------------------------------------------
+
+### Get user by order id
+URL: `/admin/orders/{id}/user`\
+Method: `GET`
 
 #### Response:
 ```JavaScript
 {
     "id": 3,
-    "username": "test",
-    "country": "Bg",
-    "address": "asd 123",
-    "email": "test@abv.bg",
-    "firstName": "Test",
-    "lastName": "Test",
-    "phone": "08900323",
+    "username": "john.doe",
+    "country": "USA",
+    "address": "st. John Doe 2",
+    "email": "john.doe@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "+123456789",
     "roles": [
         {
             "id": 1,
@@ -586,10 +548,12 @@ Required param -> id.
     ]
 }
 ```
-<br/>
 
-### GET /admin/orders/{id}/items -> Extract items from order.
-Required param -> id.
+--------------------------------------------------
+
+### Get items by order id
+URL: `/admin/orders/{id}/items`\
+Method: `GET`
 
 #### Response:
 ```JavaScript
@@ -630,26 +594,6 @@ Required param -> id.
         },
         "quantity": 3
     },
-    {
-        "id": 10,
-        "product": {
-            "id": 13,
-            "title": "SONY HDR-PJ410B",
-            "description": "Resolution : 9.2 MPx\r\nType : FLASH MEMORY\r\nDisplay in inch : 2.7 \"\r\nDigital approach : x350",
-            "price": 250,
-            "mainImageName": "9015824646174.jpg",
-            "categories": [
-                {
-                    "id": 7,
-                    "imageName": "EOS-M10_001.png",
-                    "categoryName": "Cameras"
-                }
-            ]
-        },
-        "quantity": 3
-    }
+    ...
 ]
 ```
-<br/>
-
-
