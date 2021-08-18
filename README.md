@@ -2,7 +2,7 @@
 
 E-commerce shop REST API created with Java and Spring Framework.
 
-You can view the front end of this e-commerce shop that is built with Angular [here](https://github.com/GeorgiKeranov/E-Commerce-Shop-Front-End).
+You can view the front end of this e-commerce shop that is built with Angular from [here](https://github.com/GeorgiKeranov/E-Commerce-Shop-Front-End).
 
 ## Table of contents
 - [Technologies used](#technologies-used)
