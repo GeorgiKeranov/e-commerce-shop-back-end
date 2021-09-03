@@ -46,7 +46,7 @@ You can view the front end of this e-commerce shop that is built with Angular fr
 
 ## Functionalities
 
-The project has authentication system with JWT (Json Web Token).\
+The project has an authentication system with JWT (JSON Web Token).\
 Customers can register, login, add products to their cart and then purchase them.
 
 There are two roles for users:
